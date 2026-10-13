@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Check, ChevronLeft, ChevronRight, Plus, Trash2 } from "lucide-react";
 import type { InspectionController } from "@/hooks/use-inspection";
 import { deletePhotos } from "@/db/inspection.repository";
@@ -19,13 +19,6 @@ export function InspectStep({ c }: { c: InspectionController }) {
     areas.findIndex((a) => a.id === inspection.currentAreaId),
   );
   const area = areas[index];
-  const activeChip = useRef<HTMLButtonElement>(null);
-  const areaId = area?.id;
-
-  // Keep the current area's pill in view in the scrolling row.
-  useEffect(() => {
-    activeChip.current?.scrollIntoView({ inline: "center", block: "nearest" });
-  }, [areaId]);
 
   if (!area) {
     return (
@@ -46,12 +39,11 @@ export function InspectStep({ c }: { c: InspectionController }) {
 
   return (
     <>
-      <div className="-mx-6 mb-8 flex gap-2 overflow-x-auto px-6 pb-2">
+      <div className="mb-8 flex flex-wrap gap-2">
         {areas.map((a) => (
           <button
             key={a.id}
             type="button"
-            ref={a.id === area.id ? activeChip : null}
             aria-pressed={a.id === area.id}
             onClick={() => select(a.id)}
             className="select-card inline-flex h-12 shrink-0 items-center gap-1.5 rounded-full px-5 text-sm font-medium whitespace-nowrap"
